@@ -1,0 +1,9 @@
+condition	cohort	model	gene_set	technical_sensitivity_flag	n_gene_model_estimates	n_fit_ok	n_p_lt_0_05	n_q_lt_0_05	n_gene_PH_possible_violations	n_global_PH_possible_violations	median_n	min_n	median_n_events	min_n_events	median_events_per_variable	median_missing_fraction
+log2	Kocak	adjusted_A_age18_MYCN_stage	12_clock_genes	primary_log2_expression	12	12	3	1	2	12	471.0	471	90.0	90	12.857142857142858	0.27426810477657937
+log2	Kocak	adjusted_B_highrisk_age18	12_clock_genes	primary_log2_expression	12	12	5	2	5	12	476.0	476	91.0	91	30.333333333333332	0.2665639445300462
+log2	Kocak	adjusted_C_age18_MYCN_stage_sex	12_clock_genes	primary_log2_expression	12	12	2	1	2	12	457.0	457	87.0	87	10.875	0.29583975346687214
+log2	Kocak	univariable_expression	12_clock_genes	primary_log2_expression	12	12	8	8	3	3	476.0	476	91.0	91	91.0	0.2665639445300462
+log2	SEQC	adjusted_A_age18_MYCN_stage	12_clock_genes	primary_log2_expression	12	12	2	1	1	12	493.0	493	104.0	104	14.857142857142858	0.010040160642570281
+log2	SEQC	adjusted_B_highrisk_age18	12_clock_genes	primary_log2_expression	12	12	5	5	2	12	498.0	498	105.0	105	35.0	0.0
+log2	SEQC	adjusted_C_age18_MYCN_stage_sex	12_clock_genes	primary_log2_expression	12	12	1	1	0	12	493.0	493	104.0	104	13.0	0.010040160642570281
+log2	SEQC	univariable_expression	12_clock_genes	primary_log2_expression	12	12	10	10	0	0	498.0	498	105.0	105	105.0	0.0

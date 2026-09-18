@@ -1,0 +1,561 @@
+README: NCC Tool - Nina's Circadian Clockwork
+================================================
+
+Purpose
+-------
+The NCC Tool is a command-line workflow for generating reference and target
+gene-correlation matrices, computing Clock Correlation Distance (CCD), building
+random-gene backgrounds, and testing direct between-group Delta-CCD contrasts.
+
+The tool supports:
+
+    1. Reference correlation generation
+    2. Target correlation generation
+    3. Randomized background generation
+    4. CCD computation
+    5. Direct Delta-CCD contrasts
+    6. Permutation-based Delta-CCD significance
+    7. Bootstrap Delta-CCD confidence intervals
+    8. Unmatched or matched random-gene backgrounds
+    9. Optional target/background meta-analysis
+
+The reference can be Human or Mouse, provided that the reference species,
+reference gene list, manifests, and reference-to-target mapping are configured
+consistently.
+
+
+Basic usage
+-----------
+Run:
+
+    python NCC_tool.py [arguments]
+
+Show command-line help:
+
+    python NCC_tool.py --help
+
+
+Required arguments
+------------------
+    --input_reference_db_file
+        Reference manifest/table.
+
+    --l_clock_genes_reference
+        Pipe-separated reference gene list.
+
+        Mouse example:
+            Bmal1|Clock|Cry1|Cry2|Dbp|Npas2|Nr1d1|Nr1d2|Per1|Per2|Per3|Tef
+
+        Human example:
+            ARNTL|CLOCK|CRY1|CRY2|DBP|NPAS2|NR1D1|NR1D2|PER1|PER2|PER3|TEF
+
+    --reference_species
+        Reference species, e.g. Mouse or Human.
+
+    --input_target_db_file
+        Target manifest/table.
+
+    --reference_target_gene_file
+        Tabular one-to-one reference-to-target gene mapping file.
+
+    --target_species
+        Target species, e.g. Human.
+
+
+Reference correlation outputs
+-----------------------------
+    --reference_full_rho_info
+        Detailed reference correlation output.
+        Default:
+            reference_databases_full_rho_info.tsv
+
+    --reference_weighted_rho_matrix
+        Weighted reference correlation matrix.
+        Default:
+            reference_weighted_rho.csv
+
+
+Target correlation output
+-------------------------
+    --target_full_rho_info
+        Detailed target correlation output.
+        Default:
+            target_databases_full_rho_info.csv
+
+
+Randomization / CCD outputs
+---------------------------
+    --number_randomizations
+        Number of randomizations used for background significance.
+        Default:
+            1000
+
+    --background_target_full_rho_info
+        Background/randomized correlation output.
+        Default:
+            background_target_full_rho_info.tsv
+
+    --outfile_results
+        CCD result output.
+        Default:
+            CCD_results.tsv
+
+
+Main workflow switches
+----------------------
+    --generate_reference_correlations
+        Generate the reference correlation matrix.
+
+    --generate_target_correlations
+        Generate target correlations.
+
+    --generate_background_target_correlations
+        Generate randomized background correlations.
+
+    --compute_CCD
+        Compute CCD.
+
+    --compute_delta_CCD
+        Compute direct between-group Delta-CCD.
+
+    --run_metanalysis_target
+        Run meta-analysis across target datasets and corresponding backgrounds.
+
+
+Reference correlation example
+-----------------------------
+Mouse reference:
+
+    python NCC_tool.py \
+      --input_reference_db_file manifest.d/reference_mouse_clock.tsv \
+      --reference_full_rho_info results.d/reference_mouse_clock_12.full_rho.tsv \
+      --reference_weighted_rho_matrix results.d/reference_mouse_clock_12.weighted_rho.csv \
+      --l_clock_genes_reference "Bmal1|Clock|Cry1|Cry2|Dbp|Npas2|Nr1d1|Nr1d2|Per1|Per2|Per3|Tef" \
+      --reference_species Mouse \
+      --input_target_db_file manifest.d/reference_mouse_clock.tsv \
+      --target_full_rho_info results.d/_tmp.reference_mouse_clock_12.target.tsv \
+      --reference_target_gene_file mouse_human_11orthologue.tsv \
+      --target_species Mouse \
+      --generate_reference_correlations
+
+
+Human reference example
+-----------------------
+    python NCC_tool.py \
+      --input_reference_db_file manifest.d/reference_human_adrenal_gland.tsv \
+      --reference_full_rho_info results.d/reference_human_adrenal_gland_12.full_rho.tsv \
+      --reference_weighted_rho_matrix results.d/reference_human_adrenal_gland_12.weighted_rho.csv \
+      --l_clock_genes_reference "ARNTL|CLOCK|CRY1|CRY2|DBP|NPAS2|NR1D1|NR1D2|PER1|PER2|PER3|TEF" \
+      --reference_species Human \
+      --input_target_db_file manifest.d/reference_human_adrenal_gland.tsv \
+      --target_full_rho_info results.d/_tmp.reference_human_adrenal_gland_12.target.tsv \
+      --reference_target_gene_file human_human_gene_map.tsv \
+      --target_species Human \
+      --generate_reference_correlations
+
+
+Target CCD workflow
+-------------------
+A standard target CCD run typically performs:
+
+    generate target correlations
+    generate randomized background correlations
+    compute CCD
+
+Example:
+
+    python NCC_tool.py \
+      --input_reference_db_file manifest.d/reference_mouse_clock.tsv \
+      --reference_weighted_rho_matrix results.d/reference_mouse_clock_12.weighted_rho.csv \
+      --l_clock_genes_reference "Bmal1|Clock|Cry1|Cry2|Dbp|Npas2|Nr1d1|Nr1d2|Per1|Per2|Per3|Tef" \
+      --reference_species Mouse \
+      --input_target_db_file manifests.d/target_clock_risk_12.tsv \
+      --target_full_rho_info results.d/target_clock_risk_12.reference_mouse_clock.target_full_rho.tsv \
+      --reference_target_gene_file mouse_human_11orthologue.tsv \
+      --target_species Human \
+      --number_randomizations 1000 \
+      --background_target_full_rho_info results.d/target_clock_risk_12.reference_mouse_clock.background.tsv \
+      --outfile_results results.d/target_clock_risk_12.reference_mouse_clock.CCD.tsv \
+      --generate_target_correlations \
+      --generate_background_target_correlations \
+      --compute_CCD \
+      --background_matching_mode unmatched
+
+
+Background matching modes
+-------------------------
+The tool supports:
+
+    --background_matching_mode unmatched
+
+or:
+
+    --background_matching_mode matched
+
+
+Unmatched background
+~~~~~~~~~~~~~~~~~~~~
+Unmatched mode samples random gene sets without explicitly matching the target
+genes on expression or variance.
+
+This provides a broad random-gene null.
+
+
+Matched background
+~~~~~~~~~~~~~~~~~~
+Matched mode samples random genes with similar aggregated expression and
+variance ranks.
+
+Parameters:
+
+    --matching_mean_caliper
+        Initial mean-expression rank tolerance.
+        Default: 0.05
+
+    --matching_variance_caliper
+        Initial variance-rank tolerance.
+        Default: 0.05
+
+    --matching_expand_step
+        Caliper expansion step.
+        Default: 0.05
+
+    --matching_max_caliper
+        Maximum permitted matching caliper before nearest-gene fallback.
+        Default: 1.00
+
+    --matching_seed
+        Random seed.
+        Default: 42
+
+Optional matched-null outputs:
+
+    --matched_gene_summary_outfile
+        Per-gene matching summary.
+
+    --matched_sets_outfile
+        Sampled matched random-gene sets.
+
+
+Matched-background example
+--------------------------
+    python NCC_tool.py \
+      --input_reference_db_file manifest.d/reference_mouse_clock.tsv \
+      --reference_weighted_rho_matrix results.d/reference_mouse_clock_12.weighted_rho.csv \
+      --l_clock_genes_reference "Bmal1|Clock|Cry1|Cry2|Dbp|Npas2|Nr1d1|Nr1d2|Per1|Per2|Per3|Tef" \
+      --reference_species Mouse \
+      --input_target_db_file manifests.d/target_clock_risk_12.tsv \
+      --target_full_rho_info results.d/target_clock_risk_12.reference_mouse_clock.matched.target_full_rho.tsv \
+      --reference_target_gene_file mouse_human_11orthologue.tsv \
+      --target_species Human \
+      --number_randomizations 1000 \
+      --background_target_full_rho_info results.d/target_clock_risk_12.reference_mouse_clock.matched.background.tsv \
+      --outfile_results results.d/target_clock_risk_12.reference_mouse_clock.matched.CCD.tsv \
+      --generate_target_correlations \
+      --generate_background_target_correlations \
+      --compute_CCD \
+      --background_matching_mode matched \
+      --matching_mean_caliper 0.05 \
+      --matching_variance_caliper 0.05 \
+      --matching_expand_step 0.05 \
+      --matching_max_caliper 1.0 \
+      --matching_seed 42 \
+      --matched_gene_summary_outfile results.d/target_clock_risk_12.reference_mouse_clock.matched.gene_summary.tsv \
+      --matched_sets_outfile results.d/target_clock_risk_12.reference_mouse_clock.matched.gene_sets.tsv
+
+
+Direct Delta-CCD
+----------------
+Direct Delta-CCD compares CCD between two groups:
+
+    Delta-CCD = CCD(Group A) - CCD(Group B)
+
+Thus:
+
+    Delta-CCD > 0
+        Group A has larger CCD.
+
+    Delta-CCD < 0
+        Group A has smaller CCD.
+
+Arguments:
+
+    --contrast_variable
+        Metadata variable defining the contrast.
+
+    --group_a
+        First group.
+
+    --group_b
+        Second group.
+
+    --delta_n_permutations
+        Number of label permutations.
+        Default: 5000
+
+    --delta_n_bootstraps
+        Number of bootstrap resamples.
+        Default: 2000
+
+    --delta_seed
+        Random seed.
+        Default: 42
+
+    --delta_min_samples_per_group
+        Minimum samples required in each group.
+        Default: 10
+
+    --delta_outfile_results
+        Delta-CCD result table.
+        Default:
+            delta_CCD_results.tsv
+
+    --delta_outfile_draws
+        Optional output for permutation/bootstrap draws.
+
+
+Delta-CCD example
+-----------------
+MYCN amplification:
+
+    python NCC_tool.py \
+      --input_reference_db_file manifest.d/reference_mouse_clock.tsv \
+      --reference_weighted_rho_matrix results.d/reference_mouse_clock_12.weighted_rho.csv \
+      --l_clock_genes_reference "Bmal1|Clock|Cry1|Cry2|Dbp|Npas2|Nr1d1|Nr1d2|Per1|Per2|Per3|Tef" \
+      --reference_species Mouse \
+      --input_target_db_file manifests.d/target_clock_all_12.tsv \
+      --reference_target_gene_file mouse_human_11orthologue.tsv \
+      --target_species Human \
+      --compute_delta_CCD \
+      --contrast_variable mycn_status_unified \
+      --group_a amplified \
+      --group_b not_amplified \
+      --delta_n_permutations 5000 \
+      --delta_n_bootstraps 2000 \
+      --delta_seed 42 \
+      --delta_min_samples_per_group 10 \
+      --delta_outfile_results results.d/target_clock_all_12.reference_mouse_clock.MYCN.delta.tsv \
+      --delta_outfile_draws results.d/target_clock_all_12.reference_mouse_clock.MYCN.delta_draws.tsv
+
+
+Common clinical contrasts
+-------------------------
+MYCN amplification:
+
+    --contrast_variable mycn_status_unified
+    --group_a amplified
+    --group_b not_amplified
+
+Harmonized risk:
+
+    --contrast_variable risk_group_custom
+    --group_a high_risk
+    --group_b low_risk
+
+INSS stage:
+
+    --contrast_variable inss_stage_5cat
+    --group_a st4
+    --group_b st1
+
+Sex:
+
+    --contrast_variable sex_unified
+    --group_a male
+    --group_b female
+
+Outcome:
+
+    --contrast_variable alive_status
+    --group_a dead
+    --group_b alive
+
+Age at diagnosis:
+
+    --contrast_variable age_group_18m
+    --group_a ge18m
+    --group_b lt18m
+
+
+Target meta-analysis
+--------------------
+Use:
+
+    --run_metanalysis_target
+
+to request meta-analysis across target datasets represented in the input
+manifest. The NCC implementation also applies the corresponding meta-analysis
+to background datasets.
+
+
+Reference-agnostic species configuration
+----------------------------------------
+Mouse reference -> Human target:
+
+    --reference_species Mouse
+    --target_species Human
+
+Human reference -> Human target:
+
+    --reference_species Human
+    --target_species Human
+
+The reference gene symbols must match the reference species and expression
+dataset. The mapping file must be compatible with the reference-target pair.
+
+
+Recommended naming convention
+-----------------------------
+Reference outputs:
+
+    <reference_name>_<gene_set>.full_rho.tsv
+    <reference_name>_<gene_set>.weighted_rho.csv
+
+Target CCD outputs:
+
+    target_clock_<variable>_<gene_set>.<reference_name>.target_full_rho.tsv
+    target_clock_<variable>_<gene_set>.<reference_name>.background.tsv
+    target_clock_<variable>_<gene_set>.<reference_name>.CCD.tsv
+
+Matched-background outputs:
+
+    target_clock_<variable>_<gene_set>.<reference_name>.matched.target_full_rho.tsv
+    target_clock_<variable>_<gene_set>.<reference_name>.matched.background.tsv
+    target_clock_<variable>_<gene_set>.<reference_name>.matched.CCD.tsv
+    target_clock_<variable>_<gene_set>.<reference_name>.matched.gene_summary.tsv
+    target_clock_<variable>_<gene_set>.<reference_name>.matched.gene_sets.tsv
+
+Delta-CCD outputs:
+
+    target_clock_all_<gene_set>.<reference_name>.<contrast>.delta.tsv
+    target_clock_all_<gene_set>.<reference_name>.<contrast>.delta_draws.tsv
+
+
+Pseudocode
+----------
+    parse command-line arguments
+
+    load reference manifest
+    load target manifest
+    load reference-target gene mapping
+
+    if generate_reference_correlations:
+        compute reference correlations
+        write full reference correlation table
+        write weighted reference matrix
+
+    if generate_target_correlations:
+        compute target correlations
+        write target correlation table
+
+    if generate_background_target_correlations:
+
+        if matching mode == unmatched:
+            sample random gene sets
+
+        if matching mode == matched:
+            match candidate genes on expression and variance
+            sample matched random gene sets
+            optionally save matching diagnostics
+
+        compute background correlations
+
+    if compute_CCD:
+        compare target with reference correlation structure
+        calculate CCD
+        compare observed CCD with background distribution
+        write CCD results
+
+    if compute_delta_CCD:
+        select contrast variable
+        select Group A and Group B
+        enforce minimum sample size
+        calculate observed Delta-CCD
+        permute group labels
+        estimate permutation significance
+        bootstrap samples
+        estimate confidence intervals
+        write Delta-CCD results
+        optionally write resampling draws
+
+    if run_metanalysis_target:
+        combine target results across datasets/cohorts
+        combine corresponding background results
+
+
+Interpretation
+--------------
+CCD asks:
+
+    How different is the target correlation structure from the reference?
+
+Unmatched background testing asks:
+
+    Is the observed CCD unusual relative to arbitrary random gene sets?
+
+Matched background testing asks:
+
+    Is the observed CCD unusual relative to random genes with similar
+    expression and variance characteristics?
+
+Direct Delta-CCD asks:
+
+    Is CCD different between two clinical groups?
+
+These are separate inference layers. Background significance should not be
+reported as the p-value for the direct Delta-CCD contrast.
+
+
+Troubleshooting
+---------------
+
+Reference matrix missing
+~~~~~~~~~~~~~~~~~~~~~~~~
+Check that the weighted reference matrix exists and is non-empty.
+
+Reference genes not found
+~~~~~~~~~~~~~~~~~~~~~~~~~
+Check that --l_clock_genes_reference uses gene symbols appropriate for
+--reference_species and that those genes are present in the reference dataset.
+
+Mapping problems
+~~~~~~~~~~~~~~~~
+Check --reference_target_gene_file and confirm that all required genes map to
+the target species.
+
+Delta-CCD groups not found
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+Check that --contrast_variable exists in the target metadata and that the group
+labels exactly match --group_a and --group_b.
+
+Delta-CCD not computed
+~~~~~~~~~~~~~~~~~~~~~~
+Check that --compute_delta_CCD was supplied and that both groups meet
+--delta_min_samples_per_group.
+
+Matched-null sampling problems
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Inspect:
+    --matching_mean_caliper
+    --matching_variance_caliper
+    --matching_expand_step
+    --matching_max_caliper
+
+Also consider writing:
+    --matched_gene_summary_outfile
+    --matched_sets_outfile
+
+Reproducibility
+~~~~~~~~~~~~~~~
+Use fixed:
+    --delta_seed
+    --matching_seed
+
+
+Notes
+-----
+- The default unmatched background uses 1000 randomizations.
+- The default Delta-CCD workflow uses 5000 permutations and 2000 bootstraps.
+- Direct Delta-CCD and background CCD significance are distinct analyses.
+- Reference and target species must be configured consistently with the gene
+  mapping file.

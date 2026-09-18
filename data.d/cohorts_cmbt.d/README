@@ -1,0 +1,1 @@
+#Follow the combat suggested pipeline from scanpy, with the exception of a previous normalization, and using log2 instead of log1p. Corrections were conducted using the "correct_mycn_r2.py" script.

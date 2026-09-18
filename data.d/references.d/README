@@ -1,0 +1,2 @@
+#Following Shilts et al. 2018 (https://doi.org/10.7717/peerj.4327, https://github.com/hugheylab/deltaccd) bulk-RNA seq reference databases were obtained and processed using the preprocess.py script.
+#Sc-RNA-seq databases for post-natal and developing human adrenal gland were kindly provided by the authors of Bedoya-Reina et al. 2021 and Jasky et al. 2021.

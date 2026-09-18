@@ -1,0 +1,3 @@
+db_name	cohort	requested_time_variable	resolved_time_variable	requested_event_variable	resolved_event_variable	event_coding_rule	time_unit_label	n_start	n_complete	n_events	n_censored	missing_fraction	status	condition
+SEQC	SEQC	auto	os_day	auto	os_bin	1=death/event,0=censored/alive	as_provided	498	498	105	393	0.0	ok	log2
+Kocak	Kocak	auto	overallsurvival	auto	osevent	1=death/event,0=censored/alive	as_provided	649	476	91	385	0.26656394453004617	ok	log2

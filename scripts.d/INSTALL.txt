@@ -1,0 +1,298 @@
+INSTALLATION INSTRUCTIONS: NCC Tool Python environment
+=====================================================
+
+Purpose
+-------
+This file describes the Python environment and libraries required to run the
+NCC Tool and related circadian-clock correlation / CCD workflows.
+
+The script imports:
+
+    import pandas as pd
+    import scanpy as sc
+    import numpy as np
+    import seaborn as sns
+    import matplotlib.pyplot as plt
+
+    import argparse
+    import math
+    import os
+    import warnings
+    import itertools
+    import sys
+
+    from statsmodels.stats.multitest import multipletests
+
+
+Recommended Python version
+--------------------------
+Use Python 3.10 or 3.11.
+
+Check your Python version with:
+
+    python --version
+
+or:
+
+    python3 --version
+
+
+Python standard-library modules
+-------------------------------
+The following modules are part of the Python standard library and do not need
+to be installed separately:
+
+    argparse
+    math
+    os
+    warnings
+    itertools
+    sys
+
+
+External Python packages
+------------------------
+The following packages must be installed:
+
+    pandas
+    scanpy
+    numpy
+    seaborn
+    matplotlib
+    statsmodels
+
+
+Option 1: Install with pip
+--------------------------
+Create a virtual environment:
+
+    python3 -m venv ncc_env
+
+Activate it:
+
+Linux / macOS:
+
+    source ncc_env/bin/activate
+
+Windows PowerShell:
+
+    ncc_env\Scripts\Activate.ps1
+
+Upgrade pip:
+
+    python -m pip install --upgrade pip
+
+Install the required packages:
+
+    pip install pandas numpy scanpy seaborn matplotlib statsmodels
+
+
+Option 2: Install with conda
+----------------------------
+Create a conda environment:
+
+    conda create -n ncc_env python=3.11
+
+Activate it:
+
+    conda activate ncc_env
+
+Install the main packages:
+
+    conda install -c conda-forge pandas numpy scanpy seaborn matplotlib statsmodels
+
+
+Recommended one-line pip installation
+-------------------------------------
+    pip install pandas numpy scanpy seaborn matplotlib statsmodels
+
+
+Recommended one-line conda installation
+---------------------------------------
+    conda install -c conda-forge pandas numpy scanpy seaborn matplotlib statsmodels
+
+
+Package roles
+-------------
+pandas
+    Used for tabular data handling, reading and writing TSV/CSV files, and
+    manipulating expression and metadata tables.
+
+numpy
+    Used for numerical operations, arrays, statistics, and matrix handling.
+
+scanpy
+    Used for expression-data handling and analysis utilities, particularly
+    when working with AnnData or single-cell-style data structures.
+
+seaborn
+    Used for statistical plotting and visualization.
+
+matplotlib
+    Used for general plotting and figure generation.
+
+statsmodels
+    Used here for multiple-testing correction through:
+
+        from statsmodels.stats.multitest import multipletests
+
+
+Testing the installation
+------------------------
+After installation, test the environment with:
+
+    python -c "import pandas, scanpy, numpy, seaborn, matplotlib, statsmodels; print('NCC dependencies OK')"
+
+If successful, the output should be:
+
+    NCC dependencies OK
+
+
+Optional version check
+----------------------
+To print installed package versions:
+
+    python -c "import pandas, scanpy, numpy, seaborn, matplotlib, statsmodels; print('pandas', pandas.__version__); print('scanpy', scanpy.__version__); print('numpy', numpy.__version__); print('seaborn', seaborn.__version__); print('matplotlib', matplotlib.__version__); print('statsmodels', statsmodels.__version__)"
+
+
+Example requirements.txt
+------------------------
+A minimal requirements.txt can contain:
+
+    pandas
+    numpy
+    scanpy
+    seaborn
+    matplotlib
+    statsmodels
+
+Install from this file with:
+
+    pip install -r requirements.txt
+
+
+Example environment.yml
+-----------------------
+A minimal conda environment file can contain:
+
+    name: ncc_env
+
+    channels:
+      - conda-forge
+
+    dependencies:
+      - python=3.11
+      - pandas
+      - numpy
+      - scanpy
+      - seaborn
+      - matplotlib
+      - statsmodels
+
+Create the environment with:
+
+    conda env create -f environment.yml
+
+Then activate it with:
+
+    conda activate ncc_env
+
+
+Troubleshooting
+---------------
+
+ModuleNotFoundError
+~~~~~~~~~~~~~~~~~~~
+If Python reports, for example:
+
+    ModuleNotFoundError: No module named 'scanpy'
+
+install the missing package:
+
+    pip install scanpy
+
+or:
+
+    conda install -c conda-forge scanpy
+
+
+Wrong Python environment
+~~~~~~~~~~~~~~~~~~~~~~~~
+Check which Python executable is active:
+
+Linux / macOS:
+
+    which python
+
+Windows:
+
+    where python
+
+Also check:
+
+    python -m pip --version
+
+This should point to the same environment as the Python executable used to run
+the NCC Tool.
+
+
+Scanpy installation problems
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Scanpy has several scientific Python dependencies. If installation with pip is
+problematic, using conda-forge is often simpler:
+
+    conda install -c conda-forge scanpy
+
+
+Matplotlib display errors on servers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+On headless Linux systems, plotting can fail if an interactive display backend
+is expected. The NCC script can still save figures by using a non-interactive
+backend if necessary.
+
+A common shell setting is:
+
+    export MPLBACKEND=Agg
+
+
+Reproducible environment
+------------------------
+Once the environment works, save the installed package versions.
+
+For pip:
+
+    pip freeze > requirements_frozen.txt
+
+For conda:
+
+    conda env export > environment_frozen.yml
+
+These files allow the same software environment to be recreated later.
+
+
+Summary
+-------
+External packages required:
+
+    pandas
+    numpy
+    scanpy
+    seaborn
+    matplotlib
+    statsmodels
+
+Standard-library modules requiring no installation:
+
+    argparse
+    math
+    os
+    warnings
+    itertools
+    sys
+
+Recommended setup:
+
+    python3 -m venv ncc_env
+    source ncc_env/bin/activate
+    python -m pip install --upgrade pip
+    pip install pandas numpy scanpy seaborn matplotlib statsmodels

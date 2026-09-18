@@ -1,0 +1,157 @@
+Nina's Circadian Clockwork (NCC) project
+========================================
+Background
+-------
+The circadian clock is a fundamental regulator of cellular homeostasis, and its 
+disruption has been implicated in aggressive neuroblastoma, particularly in 
+tumours harbouring MYCN-gene amplification. 
+
+We estimated and compared the circadian gene network dysregulation in tumours 
+of patients obtained from two different cohorts (SEQC n=498 and Kocak n=649), 
+with contrasting clinical features of outcome (e.g. risk, stage, and MYCN 
+amplification), using as proxy the difference of the Clock correlation distance 
+(Delta-CCD) with canonical, adrenal tissue matched, and developmental references.
+The robustness of the results was further assessed using a meta-analysis across
+the two cohorts, and leave-one-gene-out analyses. Further, Cox proportional
+hazards regression models adjusted for clinical covariates were used to estimate
+the association between the expression of each clock gene and patient outcome.
+
+
+Purpose
+-------
+This project contains the input data, manifests, scripts, and results used for
+NCC/CCD, Delta-CCD, matched-background, leave-one-gene-out, and Cox survival
+analyses of circadian clock gene coordination.
+
+The project is organized into the following main folders:
+
+    data.d/
+    manifest.d/
+    results.d/
+    results_cmbt.d/
+    scripts.d/
+
+
+data.d/
+-------
+Purpose:
+
+    Stores input expression matrices, clinical metadata, orthology files,
+    reference datasets, and other source data required by the analysis
+    workflows.
+
+
+
+manifest.d/
+-----------
+Purpose:
+
+    Stores manifest files that describe reference and target datasets for the
+    NCC/CCD workflows.
+
+Manifest files tell the analysis scripts where input expression data are
+located and how samples or groups should be selected.
+
+
+results.d/
+----------
+Purpose:
+
+    Stores analysis outputs generated from the primary expression data,
+    typically the standard log2-normalized condition.
+
+
+results_cmbt.d/
+---------------
+Purpose:
+
+    Stores analysis outputs generated from MYCN-ComBat-corrected expression
+    data.
+
+This directory should mirror the structure of results.d/ as closely as
+possible so that primary and MYCN-corrected sensitivity analyses can be
+compared directly.
+
+
+Important interpretation:
+
+    results.d/
+        Primary log2-expression analyses.
+
+    results_cmbt.d/
+        MYCN-ComBat-corrected technical sensitivity analyses.
+
+The corrected analyses should generally be treated as sensitivity analyses
+rather than replacements for the primary log2 analyses.
+
+
+scripts.d/
+----------
+Purpose:
+
+    Stores the Python and Bash scripts used to run the analysis workflows.
+
+
+Suggested workflow
+------------------
+A typical analysis proceeds as follows:
+    1. Place source data and mapping files in:
+           data.d/
+    2. Prepare reference and target manifests in:
+           manifest.d/
+    3. Run scripts from:
+           scripts.d/
+    4. Write primary log2 analysis outputs to:
+           results.d/
+    5. Write MYCN-ComBat-corrected sensitivity outputs to:
+           results_cmbt.d/
+
+
+Naming standards
+----------------------
+Reference correlation files:
+    <reference_name>_<gene_set>.full_rho.tsv
+    <reference_name>_<gene_set>.weighted_rho.csv
+
+Target CCD files:
+    target_clock_<variable>_<gene_set>.<reference_name>.target_full_rho.tsv
+    target_clock_<variable>_<gene_set>.<reference_name>.background.tsv
+    target_clock_<variable>_<gene_set>.<reference_name>.CCD.tsv
+
+
+Direct Delta-CCD files:
+    target_clock_all_<gene_set>.<reference_name>.<contrast>.delta.tsv
+    target_clock_all_<gene_set>.<reference_name>.<contrast>.delta_draws.tsv
+
+
+Matched-background files:
+    target_clock_<variable>_<gene_set>.<reference_name>.matched.target_full_rho.tsv
+    target_clock_<variable>_<gene_set>.<reference_name>.matched.background.tsv
+    target_clock_<variable>_<gene_set>.<reference_name>.matched.CCD.tsv
+    target_clock_<variable>_<gene_set>.<reference_name>.matched.gene_summary.tsv
+    target_clock_<variable>_<gene_set>.<reference_name>.matched.gene_sets.tsv
+
+
+Path convention
+---------------
+Where possible, scripts should use variables such as:
+    DATA_DIR="data.d"
+    MANIFEST_DIR="manifest.d"
+    RESULTS_DIR="results.d"/"results_cmbt.d"
+    SCRIPTS_DIR="scripts.d"
+
+This keeps path handling consistent across Bash workflows.
+
+
+Summary
+-------
+    data.d/
+        Raw or processed input data and mappings.
+    manifest.d/
+        Reference and target dataset manifests.
+    results.d/
+        Primary log2 NCC/CCD, Delta-CCD, LOO, Cox, and related outputs.
+    results_cmbt.d/
+        MYCN-ComBat-corrected sensitivity-analysis outputs.
+    scripts.d/
+        Python and Bash scripts used to generate all analyses.

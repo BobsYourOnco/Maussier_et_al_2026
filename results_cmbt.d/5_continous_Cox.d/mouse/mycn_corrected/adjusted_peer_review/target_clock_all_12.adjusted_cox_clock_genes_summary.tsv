@@ -1,0 +1,9 @@
+condition	cohort	model	gene_set	technical_sensitivity_flag	n_gene_model_estimates	n_fit_ok	n_p_lt_0_05	n_q_lt_0_05	n_gene_PH_possible_violations	n_global_PH_possible_violations	median_n	min_n	median_n_events	min_n_events	median_events_per_variable	median_missing_fraction
+mycn_corrected	Kocak	adjusted_A_age18_MYCN_stage	12_clock_genes	MYCN_corrected_expression_technical_sensitivity_only	12	12	3	1	2	12	471.0	471	90.0	90	12.857142857142858	0.26749611197511663
+mycn_corrected	Kocak	adjusted_B_highrisk_age18	12_clock_genes	MYCN_corrected_expression_technical_sensitivity_only	12	12	2	0	1	12	471.0	471	90.0	90	30.0	0.26749611197511663
+mycn_corrected	Kocak	adjusted_C_age18_MYCN_stage_sex	12_clock_genes	MYCN_corrected_expression_technical_sensitivity_only	12	12	2	1	2	12	457.0	457	87.0	87	10.875	0.2892690513219285
+mycn_corrected	Kocak	univariable_expression	12_clock_genes	MYCN_corrected_expression_technical_sensitivity_only	12	12	4	2	0	0	471.0	471	90.0	90	90.0	0.26749611197511663
+mycn_corrected	SEQC	adjusted_A_age18_MYCN_stage	12_clock_genes	MYCN_corrected_expression_technical_sensitivity_only	12	12	2	1	1	12	493.0	493	104.0	104	14.857142857142858	0.0
+mycn_corrected	SEQC	adjusted_B_highrisk_age18	12_clock_genes	MYCN_corrected_expression_technical_sensitivity_only	12	12	3	0	1	12	493.0	493	104.0	104	34.666666666666664	0.0
+mycn_corrected	SEQC	adjusted_C_age18_MYCN_stage_sex	12_clock_genes	MYCN_corrected_expression_technical_sensitivity_only	12	12	1	1	1	12	493.0	493	104.0	104	13.0	0.0
+mycn_corrected	SEQC	univariable_expression	12_clock_genes	MYCN_corrected_expression_technical_sensitivity_only	12	12	5	4	0	0	493.0	493	104.0	104	104.0	0.0
